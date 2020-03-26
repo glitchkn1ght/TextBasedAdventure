@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace TextBasedAdventure
 {
-    class Program
+    public interface IArmour
     {
-        static void Main(string[] args)
-        {
-            
+         string ArmourName { get; set; }
+         int DamageReduction { get; set; }
 
-        }
     }
 }

@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace TextBasedAdventure
 {
-    class Program
+   public interface IWeapon
     {
-        static void Main(string[] args)
-        {
-            
-
-        }
+          string WeaponName { get; set; }
+         int MinDamage { get; set; }
+         int MaxDamage { get; set; }
     }
 }
