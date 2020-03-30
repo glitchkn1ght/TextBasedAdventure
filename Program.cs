@@ -10,7 +10,7 @@ namespace TextBasedAdventure
     {
         static void Main(string[] args)
         {
-            
+            //Built with resharper
 
         }
     }

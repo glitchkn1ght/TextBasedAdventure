@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,63 +12,62 @@ namespace TextBasedAdventure
          string CreatureName { get; set; }
          int CreatureBaseAccuracy { get; set; }
          int CreatureBaseStrength { get; set; }
+         int MaxHp { get; set; }
+         int CurrentHp { get; }
          IWeapon CreatureDefaultWeapon { get; set; }
          IArmour CreatureDefaultArmour { get; set; }
          IAttackBehaviour Attack { get; set; }
-         int PerformAttackSequence();
-         
-    } 
-   
-    public interface IAttackBehaviour
-    {
-        bool HitYN(int acc);
-        int CalcDamage();
-
+         void SetHp(int damage);
     }
 
+   public abstract class Creature : ICreature
+   {
+       public string CreatureName { get; set; }
+       public int CreatureBaseAccuracy { get; set; }
+       public int CreatureBaseStrength { get; set; }
+       public int MaxHp { get; set; }
+       public int CurrentHp { get; private set; }
 
+       public IWeapon CreatureDefaultWeapon { get; set; }
+       public IArmour CreatureDefaultArmour { get; set; }
+       public IAttackBehaviour Attack { get; set; }
 
-
-    public class standardAttack : IAttackBehaviour
-    {
-       public int Lowerlimit { get; set; }
-       public int Upperlimit { get; set; }
-
-       public standardAttack(ICreature creature)
+       public void SetHp(int damage)
        {
-           Lowerlimit = creature.CreatureDefaultWeapon.MinDamage;
-           Upperlimit = Convert.ToInt32(Math.Floor(creature.CreatureDefaultWeapon.MaxDamage * 0.7));
+           CurrentHp = CurrentHp - damage;
        }
 
-       public void SetLimits(int lower, int upper)
+
+
+   }
+
+   public class Monster : Creature
+   {
+       protected Monster(string name, int acc, int str, IWeapon wep, IArmour arm)
        {
-           Lowerlimit = lower;
-           Upperlimit = upper;
+           CreatureName = name;
+           CreatureBaseAccuracy = acc;
+           CreatureBaseStrength = str;
+           CreatureDefaultWeapon = wep;
+           CreatureDefaultArmour = arm;
        }
-
-       public bool HitYN(int acc)
-       {
-            GameMethods GM = new GameMethods();
-            int HitRand = GM.RandomNum(1, 100);
-
-            if (HitRand >= 100)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-       }
-
-       public int CalcDamage()
-        { 
-       GameMethods GM = new GameMethods();
-            int dam = GM.RandomNum(Lowerlimit, Upperlimit);
-            return dam ;
-        }
     }
+
+   public class allMonster
+   {
+       public List<Monster> AvailableArmors()
+       {
+           List<Monster> availableArmors = new List<Monster>
+           {
+               new Monster("CacoDemon",50, 5,null,null)
+
+           };
+           return availableArmors;
+       }
+   }
+
+
+
 
     public class GameMethods
     {
